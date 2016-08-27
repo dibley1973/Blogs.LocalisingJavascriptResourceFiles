@@ -1,4 +1,4 @@
-# Localising Javascript Resource Files in ASP.Net
+# Localising Javascript Resource Files in ASP.Net MVC
 
 Localising website text in ASP.Net projects is trivial when carried out server-side using resource files, but what do you do when you need localaised text served from the client side? In previous projects I have served up the localised text as parameters which my javascript is initialised with by placing a call to my init() mehtod in my MVC view and populating the parameters with values from the ViewModel. This is fine if you dont have much text to localise but what if you do?
 
