@@ -9,26 +9,26 @@ namespace Blogs.LocalisingJavascriptResourceFiles.UI.Helpers
         private const char BackSlash = '\\';
         private readonly string _baseScriptFolderPath;
         private readonly string _controllerName;
-        private readonly string _resourceName;
+        private readonly string _viewName;
         private string _resourceFilePath;
         public string Output { get; private set; }
 
-        public JavascriptResourceFileContentLoader(string baseScriptFolderPath, string controllerName, string resourceName)
+        public JavascriptResourceFileContentLoader(string baseScriptFolderPath, string controllerName, string viewName)
         {
             if (string.IsNullOrWhiteSpace(baseScriptFolderPath)) throw new ArgumentNullException("baseScriptFolderPath");
             if (string.IsNullOrWhiteSpace(controllerName)) throw new ArgumentNullException("controllerName");
-            if (string.IsNullOrWhiteSpace(resourceName)) throw new ArgumentNullException("resourceName");
+            if (string.IsNullOrWhiteSpace(viewName)) throw new ArgumentNullException("viewName");
 
             _baseScriptFolderPath = baseScriptFolderPath;
             _controllerName = controllerName;
-            _resourceName = resourceName;
+            _viewName = viewName;
         }
 
         public JavascriptResourceFileContentLoader Load()
         {
             BuildFilePath();
             EnsureFileExists();
-            LoadFile();
+            LoadFileWithNoLock();
 
             return this;
         }
@@ -44,22 +44,35 @@ namespace Blogs.LocalisingJavascriptResourceFiles.UI.Helpers
             pathBuilder.Append("app.");
             pathBuilder.Append(_controllerName.ToLower());
             pathBuilder.Append(".");
-            pathBuilder.Append(_resourceName.ToLower());
+            pathBuilder.Append(_viewName.ToLower());
             pathBuilder.Append(".resource.js");
 
             _resourceFilePath = pathBuilder.ToString();
+            var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            _resourceFilePath = string.Concat(baseDirectory, _resourceFilePath);
+
         }
 
         private void EnsureFileExists()
         {
             var fileExists = File.Exists(_resourceFilePath);
             if (!fileExists) throw new FileNotFoundException(_resourceFilePath + " does not exist. ");
-            throw new NotImplementedException();
         }
 
-        private void LoadFile()
+        private void LoadFileWithNoLock()
         {
-            throw new NotImplementedException();
+            string content;
+            using (var fileReadStream = new FileStream(_resourceFilePath,
+                FileMode.Open, FileAccess.Read, FileShare.ReadWrite)
+            )
+            {
+                using (StreamReader fileStreamReader = new StreamReader(fileReadStream))
+                {
+                    content = fileStreamReader.ReadToEnd();
+                }
+            }
+
+            Output = content;
         }
     }
 }

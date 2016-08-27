@@ -10,10 +10,8 @@
 
 @section Scripts{
   <script src="@Url.Content("~/Scripts/Home/app.home.index.js")"></script>
-  <script src="@Url.Content("~/Scripts/Home/app.home.index.resource.js")"></script>
+  <script src="@Url.Action("CulturisedResourceFile", "JavascriptFile", new {controllerName = "Home", viewName = "Index"})"></script>
   <script>
-    app.home.index.init("@Html.Raw(Index.Message)", "@Html.Raw(Index.Message2)");
-    //app.home.index.promptUser();
-    app.home.index.promptUser2();
+    app.home.index.promptUser();
   </script>
 }
