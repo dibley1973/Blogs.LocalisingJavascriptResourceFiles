@@ -160,6 +160,10 @@ app.home.index.resources = {
 };
 ```
 
+So next up we need a class that can covert our javscript files with named place holders into a script with the appropriate culture resource strings inserted. Lets add a folder called Helpers to the root of the "Blogs.LocalisingJavascriptResourceFiles.UI" project. Before we can covert the file we need to get the file contents out as a stream.
+
+
+
 TBC...
 
 
