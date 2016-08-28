@@ -348,16 +348,16 @@ The first point of note is the class has some static members which hold the asse
     }
 ```
 
-So noe we can load the file and manipulate the contents, but we do not have anything to orchestrate these two processes, and how do we serve the modified file back to the client? Well we need a new controller; the `JavascriptFileController` with an "Action" called `CulturisedResourceFile()` which taking a "controller name" and a "view name" for teh view we need localised strings for as parameters. The "Action" first checks the parameters for null or emptyness and will return a BadRequest Http Status code for any errors. We then load the javascript file content, and pas this the class responsible for localising the placeholder text. If the javascript resource file was not found then a `HttpNotFoundResult` is returned, and if there is any error then a `HttpStatusCodeResult` carrying an "InternalServerError" `HttpStatusCode` is returned. 
+So now we can load the file and manipulate the contents, but we do not have anything to orchestrate these two processes, and how do we serve the modified file back to the client? Well we need a new controller; the `JavascriptFileController` with an "Action" called `CulturisedResourceFile()` which taking a "controller name" and a "view name" for teh view we need localised strings for as parameters. The "Action" first checks the parameters for null or emptyness and will return a BadRequest Http Status code for any errors. We then load the javascript file content, and pas this the class responsible for localising the placeholder text. If the javascript resource file was not found then a `HttpNotFoundResult` is returned, and if there is any error then a `HttpStatusCodeResult` carrying an "InternalServerError" `HttpStatusCode` is returned. 
 
 ```java
     public class JavascriptFileController : Controller
     {
         // GET: JavascriptResourceFile
         [HttpGet]
-        //[OutputCache(Duration = Duration.InSeconds.OneHour)]    // PROD ONLY
-        //[OutputCache(Duration = Duration.InSeconds.TenSeconds)] // TEST  ONLY
-        [OutputCache(Duration = Duration.InSeconds.OneSecond)]  // DEV  ONLY
+        //[OutputCache(Duration = Duration.InSeconds.OneHour, Location=OutputCacheLocation.Client, NoStore=true)]    // PROD ONLY
+        //[OutputCache(Duration = Duration.InSeconds.TenSeconds, Location=OutputCacheLocation.Client, NoStore=true)] // TEST  ONLY
+        [OutputCache(Duration = Duration.InSeconds.OneSecond, Location=OutputCacheLocation.Client, NoStore=true)]  // DEV  ONLY
         public ActionResult CulturisedResourceFile(string controllerName, string viewName)
         {
             if (string.IsNullOrWhiteSpace(controllerName)) return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "controllerName not supplied");

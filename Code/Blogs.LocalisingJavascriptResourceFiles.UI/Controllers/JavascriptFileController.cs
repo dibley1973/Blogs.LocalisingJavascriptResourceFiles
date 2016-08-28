@@ -4,6 +4,7 @@ using System;
 using System.IO;
 using System.Net;
 using System.Web.Mvc;
+using System.Web.UI;
 
 namespace Blogs.LocalisingJavascriptResourceFiles.UI.Controllers
 {
@@ -11,9 +12,9 @@ namespace Blogs.LocalisingJavascriptResourceFiles.UI.Controllers
     {
         // GET: JavascriptResourceFile
         [HttpGet]
-        //[OutputCache(Duration = Duration.InSeconds.OneHour)]    // PROD ONLY
-        //[OutputCache(Duration = Duration.InSeconds.TenSeconds)] // TEST  ONLY
-        [OutputCache(Duration = Duration.InSeconds.OneSecond)]  // DEV  ONLY
+        //[OutputCache(Duration = Duration.InSeconds.OneHour, Location=OutputCacheLocation.Client, NoStore=true)]    // PROD ONLY
+        //[OutputCache(Duration = Duration.InSeconds.TenSeconds, Location=OutputCacheLocation.Client, NoStore=true)] // TEST  ONLY
+        [OutputCache(Duration = Duration.InSeconds.OneSecond, Location = OutputCacheLocation.Client, NoStore = true)]  // DEV  ONLY
         public ActionResult CulturisedResourceFile(string controllerName, string viewName)
         {
             if (string.IsNullOrWhiteSpace(controllerName)) return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "controllerName not supplied");
